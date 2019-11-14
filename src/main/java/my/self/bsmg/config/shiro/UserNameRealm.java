@@ -8,12 +8,12 @@ import my.self.bsmg.constans.LoginType;
 import my.self.bsmg.mgr.LoginRestrictionMgr;
 import my.self.bsmg.service.RoleService;
 import my.self.bsmg.service.UserService;
+import my.self.bsmg.util.MD5Util;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -59,19 +59,23 @@ public class UserNameRealm extends AuthorizingRealm {
         String username = (String) authenticationToken.getPrincipal();//获取用户名，默认和login.html中的username对应。
         log.info("USER_INFO_START_CHECK_ROLE_START|{}", username);
         User user = userService.selectUserByUserName(username);
-        if (user == null) {
-            return null;
-        }
-        // 用户为禁用状态
-        if (user.getLocked() == 0) {
-            throw new LockedAccountException();
-        }
-
-        //验证该用户存在返回一个封装了用户信息的AuthenticationInfo实例
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), user.getRealname());
-        //返回
-        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
-        return authenticationInfo;
+        if (user == null) throw new UnknownAccountException();//账号不存在
+        if (user.getLocked() == 0) throw new LockedAccountException();// 用户为禁用状态
+        Integer loginRestrictionTimes = loginRestrictionMgr.getLoginRestrictionTimes(username);
+        if (loginRestrictionTimes != null && loginRestrictionTimes > 9) throw new ExcessiveAttemptsException();//登陆失败次数达到上限
+        loginRestrictionMgr.setLoginRestrictionTimes(username, loginRestrictionTimes == null ? 1 : ++loginRestrictionTimes);
+        String cryptographicPassword = new String((char[]) authenticationToken.getCredentials());//获取用户输入的前端加密密码用于自定义校验
+        String password = user.getPassword();//获取用户注册时生成的加密密码
+        if (MD5Util.verify(cryptographicPassword, password)) {//校验用户输入的密码
+            loginRestrictionMgr.removeUserLoginRestriction(username);//校验通过清空登陆失败次数统计
+        } else throw new IncorrectCredentialsException();//密码错误
+        //数据库中的realName不能为空，此处的cryptographicPassword必须为前端提交给后端的密码，因为shiro拦截获取username和password
+        return new SimpleAuthenticationInfo(user, cryptographicPassword, user.getRealname());
+        //以下为使用shiro自动校验时的写法，需要使用shiro的加密解密方式
+        //SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), user.getRealname());
+        //返回盐给shiro自动校验密码
+        //authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
+        //return authenticationInfo;
     }
 
     /**

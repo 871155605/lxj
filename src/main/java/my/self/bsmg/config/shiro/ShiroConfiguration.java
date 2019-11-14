@@ -23,7 +23,7 @@ import java.util.*;
 @Log4j2
 class ShiroConfiguration {
     //加密次数
-    private final static int MD5Times = 3;
+    private final static int MD5Times = 1;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
@@ -115,7 +115,7 @@ class ShiroConfiguration {
         UserNameRealm userPasswordRealm = new UserNameRealm();
         userPasswordRealm.setName(LoginType.USER_PASSWORD.getType());
         // 自定义的密码校验器,也可以在UserNameRealm的doGetAuthenticationInfo方法中校验，此处是自动校验
-        userPasswordRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        //userPasswordRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         //设置缓存区域命
         userPasswordRealm.setAuthorizationCacheName("users");
         //缓存管理器
@@ -150,7 +150,7 @@ class ShiroConfiguration {
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(MD5Times);//散列的次数，比如散列3次，相当于 md5(md5(""));
+        hashedCredentialsMatcher.setHashIterations(MD5Times);//散列的次数，比如散列3次，相当于 md5(md5("")); 默认为一次
         return hashedCredentialsMatcher;
     }
 

@@ -70,10 +70,10 @@ public class UserController {
             return GlobalResponse.of(-1, "密码错误");
         } catch (LockedAccountException e) {//账户被锁定
             log.error("username:{} login fail,error info is:{}", username, e.getMessage());
-            return GlobalResponse.of(-1, "账户被锁定");
-        } catch (ExcessiveAttemptsException e) {//登录失败次数超过系统最大次数,请稍后重试
+            return GlobalResponse.of(-1, "账户已被锁定");
+        } catch (ExcessiveAttemptsException e) {//登录失败次数超过系统最大次数
             log.error("username:{} login fail,error info is:{}", username, e.getMessage());
-            return GlobalResponse.of(-1, "登录失败次数超过系统最大次数,请稍后重试");
+            return GlobalResponse.of(-1, "登录失败次数超过今日最大次数");
         } catch (DisabledAccountException e) {//验证未通过,帐号已经被禁止登录
             log.error("username:{} login fail,error info is:{}", username, e.getMessage());
             return GlobalResponse.of(-1, "验证未通过,帐号已被禁止登录");
