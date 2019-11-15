@@ -45,9 +45,11 @@ class ShiroConfiguration {
         filterChainDefinitionMap.put("/common/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/login/**", "anon");
+        filterChainDefinitionMap.put("/initPassword.html", "anon");
         //Controller的登录方法匿名访问
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/checkCode/getCheckCode", "anon");
+        filterChainDefinitionMap.put("/user/initPassword", "anon");
         //设置登录页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         //设置登录成功页面

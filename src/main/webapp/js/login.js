@@ -22,15 +22,12 @@ var loginVue = new Vue({
         },
         login: function () {
             var salt = "bsmg";//使用固定的salt
-            var password = JSON.parse(this.password);//深克隆获得用户输入的密码，用于加密
+            var password = JSON.parse(JSON.stringify(this.password));//深克隆获得用户输入的密码，用于加密
             this.password = md5(salt.charAt(3) + salt.charAt(2) + password + salt.charAt(0) + salt.charAt(1));
-            alert(this.password);
             axios.post('/user/login', loginVue.$data).then(function (response) {
-                if (response.data.code === -1) {
-                    alert(response.data.message);
-                }
+                loginVue.responseMsg = response.data.message;
                 if (response.data.code === 0) {
-                    alert('登录成功：' + response.data.data.realname);
+                    alert('验证成功：' + response.data.data.realname);
                     window.location.href = "/index.html";
                 }
                 loginVue.password = "";

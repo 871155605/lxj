@@ -11,11 +11,13 @@ import my.self.bsmg.dao.UserAndRoleMapper;
 import my.self.bsmg.dao.UserMapper;
 import my.self.bsmg.entity.UserQueryReq;
 import my.self.bsmg.service.UserService;
+import my.self.bsmg.util.MD5Util;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 @Log4j2
@@ -172,6 +174,22 @@ public class UserServiceImpl implements UserService {
             log.info("PLAYER_NOT_FOUND_BY_PHONE_NUMBER|{}", phoneNumber);
         } catch (Exception e) {
             log.error("SELECT_USER_BY_PHONE_NUMBER_ERROR |{}|{}", phoneNumber, e.getMessage());
+        }
+        return null;
+    }
+
+    private final static String INIT_PASSWORD = "89ee89338bb516894125d4876c69bfe5";
+
+    @Override
+    public String initNewPassword(Map<String, String> map) {
+        String password = map.get("newPassword");
+        String inItPassword = map.get("initPassword");
+        try {
+            if (INIT_PASSWORD.equals(inItPassword)) {
+                return MD5Util.generate(password);
+            }
+        } catch (Exception e) {
+            log.error("INIT_NEW_PASSWORD_ERROR|{}", e.getMessage());
         }
         return null;
     }

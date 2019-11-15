@@ -64,4 +64,11 @@ public interface UserService {
      */
     User selectUserByPhoneNumber(String phoneNumber);
 
+    /**
+     * 初始化一个加密的密码
+     *
+     * @param map Map<String, String>
+     * @return String
+     */
+    String initNewPassword(Map<String, String> map);
 }

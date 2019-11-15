@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -73,7 +74,7 @@ public class UserController {
             return GlobalResponse.of(-1, "账户已被锁定");
         } catch (ExcessiveAttemptsException e) {//登录失败次数超过系统最大次数
             log.error("username:{} login fail,error info is:{}", username, e.getMessage());
-            return GlobalResponse.of(-1, "登录失败次数超过今日最大次数");
+            return GlobalResponse.of(-1, "登录失败次数超过今日最大次数,账号锁定一天");
         } catch (DisabledAccountException e) {//验证未通过,帐号已经被禁止登录
             log.error("username:{} login fail,error info is:{}", username, e.getMessage());
             return GlobalResponse.of(-1, "验证未通过,帐号已被禁止登录");
@@ -116,7 +117,18 @@ public class UserController {
     @GetMapping("/deleteUserByUserId")
     @RequiresPermissions("admin")
     public GlobalResponse deleteUserByUserId(@RequestParam(name = "userId") Integer userId) {
-        boolean isDelete = userService.deleteUserByUserId(userId);
-        return GlobalResponse.of(isDelete);
+        return userService.deleteUserByUserId(userId) ? GlobalResponse.of("删除用户成功") : GlobalResponse.of(-1, "删除用户失败");
+    }
+
+    @PostMapping("/insertUser")
+    @RequiresPermissions("admin")
+    public GlobalResponse insertUser(@RequestBody User user) {
+        return userService.insertUser(user) ? GlobalResponse.of("添加用户成功") : GlobalResponse.of(-1, "添加用户失败");
+    }
+
+    @PostMapping("/initPassword")
+    public GlobalResponse initNewPassword(@RequestBody Map<String, String> map) {
+        String password = userService.initNewPassword(map);
+        return password == null ? GlobalResponse.of(-1, "生成加密密码失败") : GlobalResponse.of(password);
     }
 }

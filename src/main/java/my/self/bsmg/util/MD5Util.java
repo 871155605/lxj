@@ -107,7 +107,6 @@ public class MD5Util {
         //加密
         String s = generate("7d76519b2034b48f481e0c433d2f6b8d");
         System.out.println(s);
-        System.out.println(s.length());
         //校验
         boolean verify = verify("7d76519b2034b48f481e0c433d2f6b8d", s);
         System.out.println(verify);
