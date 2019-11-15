@@ -16,6 +16,7 @@ import my.self.bsmg.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,34 +95,34 @@ public class UserController {
     }
 
     @GetMapping("/selectUserByUserId")
-    @RequiresPermissions("admin")
+    @RequiresRoles("admin")
     public GlobalResponse selectUserByUserId(@RequestParam(name = "userId") Integer userId) {
         User user = userService.selectUserByUserId(userId);
         return user == null ? GlobalResponse.of(-1, "获取用户信息失败") : GlobalResponse.of(user);
     }
 
     @PostMapping("/selectUserList")
-    @RequiresPermissions("admin")
+    @RequiresRoles("admin")
     public GlobalResponse selectUserList(@RequestBody UserQueryReq userQueryReq) {
         PageInfo<User> userPageInfo = userService.selectUserList(userQueryReq);
         return userPageInfo == null ? GlobalResponse.of(-1, "获取用户列表失败") : GlobalResponse.of(userPageInfo);
     }
 
     @GetMapping("/selectRoleListByUserId")
-    @RequiresPermissions("admin")
+    @RequiresRoles("admin")
     public GlobalResponse selectRoleListByUserId(@RequestParam(name = "userId") Integer userId) {
         List<Role> roleList = userService.selectRoleListByUserId(userId);
         return roleList == null ? GlobalResponse.of(-1, "获取用户角色列表失败") : GlobalResponse.of(roleList);
     }
 
     @GetMapping("/deleteUserByUserId")
-    @RequiresPermissions("admin")
+    @RequiresRoles("admin")
     public GlobalResponse deleteUserByUserId(@RequestParam(name = "userId") Integer userId) {
         return userService.deleteUserByUserId(userId) ? GlobalResponse.of("删除用户成功") : GlobalResponse.of(-1, "删除用户失败");
     }
 
     @PostMapping("/insertUser")
-    @RequiresPermissions("admin")
+    @RequiresRoles("admin")
     public GlobalResponse insertUser(@RequestBody User user) {
         return userService.insertUser(user) ? GlobalResponse.of("添加用户成功") : GlobalResponse.of(-1, "添加用户失败");
     }
