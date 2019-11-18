@@ -31,7 +31,7 @@
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="请输入密码">
                     <span class="label-input100">密码</span>
-                    <input class="input100" type="password" name="password" placeholder="请输入密码" v-model="password">
+                    <input class="input100" type="password" name="password" placeholder="请输入密码/空格键可以一键清空" @keyup.enter="login" @keyup.space="cleanUpThePassword" v-model="password">
                     <span class="focus-input100" data-symbol="&#xf190;"></span>
                 </div>
                 <div class="verBox">
@@ -51,7 +51,7 @@
                 </div>
                 <div id="checkCode" class="wrap-input100 validate-input" data-validate="请输入短信验证码">
                     <span class="label-input100">短信验证码</span>
-                    <input class="input100" type="text" name="checkCode" placeholder="请输入短信验证码" v-model="checkCode">
+                    <input class="input100" type="text" name="checkCode" placeholder="请输入短信验证码/空格键可以一键清空" @keyup.enter="login" @keyup.space="cleanUpThePassword" v-model="checkCode">
                     <span class="focus-input100" data-symbol="&#xf190;"></span>
                 </div>
                 <div align="right">

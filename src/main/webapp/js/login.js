@@ -11,6 +11,7 @@ var loginVue = new Vue({
         responseMsg: ''
     },
     methods: {
+        //切换登录方式
         changeLoginType: function (type) {
             this.loginType = type;
             if (type === 'user_password_realm') {
@@ -20,6 +21,7 @@ var loginVue = new Vue({
                 this.password = '';
             }
         },
+        //登录请求
         login: function () {
             var salt = "bsmg";//使用固定的salt
             var password = JSON.parse(JSON.stringify(this.password));//深克隆获得用户输入的密码，用于加密
@@ -35,9 +37,11 @@ var loginVue = new Vue({
                 console.log(error);
             });
         },
+        //是否第三方登录
         thirdPartLogin: function () {
             this.isThirdPartLogin = !this.isThirdPartLogin;
         },
+        //获取验证码
         getCheckCode: function () {
             axios.post('/checkCode/getCheckCode', this.phoneNumber).then(function (response) {
                 if (response.data.code === -1) {
@@ -49,6 +53,11 @@ var loginVue = new Vue({
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        //方便输错密码一键删除
+        cleanUpThePassword: function () {
+            this.password = '';
+            this.checkCode = '';
         }
     }
 });
