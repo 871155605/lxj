@@ -4,6 +4,7 @@ package my.self.bsmg.util;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.shiro.crypto.hash.SimpleHash;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
@@ -110,5 +111,17 @@ public class MD5Util {
         //校验
         boolean verify = verify("7d76519b2034b48f481e0c433d2f6b8d", s);
         System.out.println(verify);
+    }
+
+    /**
+     * 使用shiro自动验证时采用的md5加密方式
+     *
+     * @param credentials 密码原值
+     * @param salt        盐值
+     * @return String
+     */
+    private String MD5Encryption(String credentials, String salt) {
+        Object result = new SimpleHash("md5", credentials, salt, 3);
+        return result.toString();
     }
 }

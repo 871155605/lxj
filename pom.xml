@@ -150,14 +150,14 @@
             </plugin>
         </plugins>
         <resources>
-            <!--配置加载java下的所有资源-->
+            <!--配置加载java下的所有资源至默认targetPath-->
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
                 </includes>
             </resource>
-            <!--配置加载resources下的所有资源-->
+            <!--配置打包resources下的所有资源至默认targetPath-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
@@ -168,7 +168,7 @@
                 <!--resource的filtering属性用来表示资源文件中的占位符是否需要被替换，true为需要替换。-->
                 <filtering>false</filtering>
             </resource>
-            <!--配置加载webapp下的所有资源-->
+            <!--配置打包webapp下的所有资源至指定targetPath-->
             <resource>
                 <directory>src/main/webapp</directory>
                 <targetPath>META-INF/resources</targetPath>

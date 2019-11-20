@@ -16,8 +16,11 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Log4j2
@@ -141,8 +144,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean insertUser(User user) {
         try {
-            user.setSalt(System.currentTimeMillis() + "");
-            String password = MD5Encryption(user.getPassword(), user.getSalt());
+            String password = MD5Util.generate(user.getPassword());
             user.setPassword(password);
             int insert = userMapper.insertSelective(user);
             log.info("INSERT_USER_SELECTIVE_SUCCESS|{}|{}", insert, user.getUsername());
@@ -215,15 +217,5 @@ public class UserServiceImpl implements UserService {
             criteria.andLockedEqualTo(locked.byteValue());
         }
         return userExample;
-    }
-
-    /**
-     * @param credentials 密码原值
-     * @param salt        盐值
-     * @return String
-     */
-    private String MD5Encryption(String credentials, String salt) {
-        Object result = new SimpleHash("md5", credentials, salt, 3);
-        return result.toString();
     }
 }

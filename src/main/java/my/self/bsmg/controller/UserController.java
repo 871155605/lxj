@@ -15,14 +15,17 @@ import my.self.bsmg.exception.PhoneNumberNotBindingUserException;
 import my.self.bsmg.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Log4j2
 @RestController
@@ -31,6 +34,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    private final static String userAvatarUrl = "C:\\Users\\Administrator\\Desktop\\image\\user_avatar\\";
 
     /**
      * 登录方法
@@ -131,5 +135,30 @@ public class UserController {
     public GlobalResponse initNewPassword(@RequestBody Map<String, String> map) {
         String password = userService.initNewPassword(map);
         return password == null ? GlobalResponse.of(-1, "生成加密密码失败") : GlobalResponse.of(password);
+    }
+
+    @PostMapping("/uploadAvatar")
+    public GlobalResponse uploadAvatar(@RequestParam("userAvatar") MultipartFile file) {
+        //获取上传文件名,包含后缀
+        String filename = file.getOriginalFilename();
+        if (filename == null) return GlobalResponse.of(-1, "图片必须有后缀");
+        //获取后缀
+        String suffix = filename.substring(filename.lastIndexOf("."));
+        if (!(".jpg".equalsIgnoreCase(suffix) || ".png".equalsIgnoreCase(suffix)))
+            return GlobalResponse.of(-1, "图片格式必须为png或jpg");
+        //保存的文件名
+        String dbFileName = UUID.randomUUID() + suffix;
+        //保存路径userAvatarUrl
+        //生成保存文件
+        File saveFileUrl = new File(userAvatarUrl + dbFileName);
+        System.out.println(saveFileUrl);
+        //将上传文件保存到路径
+        try {
+            file.transferTo(saveFileUrl);
+            log.info("UPLOAD_AVATAR_SUCCESS|{}", saveFileUrl);
+        } catch (IOException e) {
+            log.error("UPLOAD_AVATAR_ERROR|{}", e.getMessage());
+        }
+        return GlobalResponse.of(dbFileName);
     }
 }
