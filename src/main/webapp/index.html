@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>index</title>
+    <script src="common/vue/vue.js"></script>
+    <script src="common/axios/axios.min.js"></script>
+    <script src="common/jquery/jquery-3.0.0.min.js"></script>
 </head>
 <body>
 <h1>------------------------------------------登录成功------------------------------------------</h1>
+<div id="indexDiv">
+    <a href="updateUser.html">添加/修改用户</a>
+    <span>{{username}}</span>
+    <span>{{realname}}</span>
+    <img height="50px" v-bind:src="avatar">
+</div>
+<script src="js/index.js"></script>
 </body>
 </html>
