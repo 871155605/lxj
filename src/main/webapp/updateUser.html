@@ -74,11 +74,11 @@
                 <div>
                     <form enctype="multipart/form-data" id="form" name="form" method="post" action="#">
                         头像
-                        <input type="file" multiple name="userAvatar" id="userAvatar">
+                        <input type="file" multiple name="avatar" id="avatar">
                         <img  height="15px" src="picture/up.png" v-on:click='uploadAvatar'><br><br>
                     </form>
                     <div align="center">
-                        <img  height="50px" aria-required="true" v-bind:src="userAvatar">
+                        <img  height="50px" aria-required="true" v-bind:src="avatar">
                     </div>
                 </div>
                 <div class="verBox">
@@ -90,7 +90,7 @@
             <div class="container-login100-form-btn">
                 <div class="wrap-login100-form-btn">
                     <div class="login100-form-bgbtn"></div>
-                    <button class="login100-form-btn" v-on:click="">确 定</button>
+                    <button class="login100-form-btn" v-on:click="insertUser">确 定</button>
                 </div>
             </div>
         </div>

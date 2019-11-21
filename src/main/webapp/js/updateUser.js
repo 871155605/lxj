@@ -4,7 +4,7 @@ var updateUserVue = new Vue({
         username: '',
         password: '',
         realname: '',
-        userAvatar: '',
+        avatar: '',
         phone: '',
         email: '',
         sex: '',
@@ -88,8 +88,8 @@ var updateUserVue = new Vue({
             return true;
         },
         //因为图片双向绑定一直无法显示成功，上传图片成功后调用此方法用来激活
-        changeUserAvatarFunction: function (userAvatar) {
-            this.userAvatar = userAvatar;
+        changeAvatarFunction: function (avatar) {
+            this.avatar = avatar;
         },
 
         uploadAvatar: function () {
@@ -101,8 +101,8 @@ var updateUserVue = new Vue({
             //document.getElementById('avatar').value
             //序列化表单，可序列化文件 new FormData($('#form')[0]))
             axios.post('user/uploadAvatar', new FormData($('#form')[0])).then(function (response) {
-                var userAvatar = avatarFolder + response.data.data;
-                updateUserVue.changeUserAvatarFunction(userAvatar);
+                var avatar = avatarFolder + response.data.data;
+                updateUserVue.changeAvatarFunction(avatar);
             })
         }
     }

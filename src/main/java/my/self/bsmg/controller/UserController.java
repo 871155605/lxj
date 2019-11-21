@@ -138,7 +138,7 @@ public class UserController {
     }
 
     @PostMapping("/uploadAvatar")
-    public GlobalResponse uploadAvatar(@RequestParam("userAvatar") MultipartFile file) {
+    public GlobalResponse uploadAvatar(@RequestParam("avatar") MultipartFile file) {
         //获取上传文件名,包含后缀
         String filename = file.getOriginalFilename();
         if (filename == null) return GlobalResponse.of(-1, "图片必须有后缀");
