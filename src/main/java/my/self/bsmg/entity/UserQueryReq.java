@@ -7,7 +7,7 @@ public class UserQueryReq {
     String realName;
     Integer sex;
     Integer locked;
-    Integer page = 1;
+    Integer pageNum = 1;
     Integer limit = 5;
 
     @Override
@@ -15,7 +15,7 @@ public class UserQueryReq {
         return "realName=" + realName +
                 " sex=" + sex +
                 " locked=" + locked +
-                " page=" + page +
+                " page=" + pageNum +
                 " limit=" + limit;
     }
 }

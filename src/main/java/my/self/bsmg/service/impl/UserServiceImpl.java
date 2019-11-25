@@ -84,10 +84,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageInfo<User> selectUserList(UserQueryReq queryReq) {
         try {
-            PageHelper.startPage(queryReq.getPage(), queryReq.getLimit());
+            PageHelper.startPage(queryReq.getPageNum(), queryReq.getLimit());
             List<User> userList = userMapper.selectByExample(createPageQueryExample(queryReq.getRealName(), queryReq.getSex(), queryReq.getLocked()));
             PageInfo<User> pageInfo = new PageInfo<>(userList);
-            log.info("SELECT_USER_LIST_SUCCESS |{}TOTAL|{}", queryReq.toString(), pageInfo.getTotal());
+            log.info("SELECT_USER_LIST_SUCCESS |{}| TOTAL={}", queryReq.toString(), pageInfo.getTotal());
             return pageInfo;
         } catch (Exception e) {
             log.error("SELECT_USER_LIST_ERROR |{}|{}", queryReq.toString(), e.getMessage());

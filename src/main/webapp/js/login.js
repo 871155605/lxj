@@ -26,14 +26,14 @@ var loginVue = new Vue({
             var salt = "bsmg";//使用固定的salt
             var password = JSON.parse(JSON.stringify(this.password));//深克隆获得用户输入的密码，用于加密
             this.password = md5(salt.charAt(3) + salt.charAt(2) + password + salt.charAt(0) + salt.charAt(1));
-            axios.post('/user/login', loginVue.$data).then(function (response) {
-                loginVue.responseMsg = response.data.message;
+            axios.post('/user/login', this.$data).then(function (response) {
+                this.responseMsg = response.data.message;
+                password = "";
                 if (response.data.code === 0) {
                     //JSON.stringify将JSON对象转换为字符串 因为sessionStorage.setItem只支持存储字符串格式
                     sessionStorage.setItem("user", JSON.stringify(response.data.data));
                     window.location.href = "/index.html";
                 }
-                loginVue.password = "";
             }).catch(function (error) {
                 console.log(error);
             });
