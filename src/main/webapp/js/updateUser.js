@@ -18,12 +18,12 @@ var updateUserVue = new Vue({
     },
     methods: {
         insertUser: function () {
-            var yesPngUrl = 'picture/yes.png';
+            var yesPngUrl = '../picture/yes.png';
             if (this.checkRealNameModel === yesPngUrl && this.checkPasswordModel === yesPngUrl && this.checkUsernameModel === yesPngUrl) {
                 var salt = "bsmg";//使用固定的salt
                 var password = JSON.parse(JSON.stringify(this.password));//深克隆获得用户输入的密码，用于加密
                 this.password = md5(salt.charAt(3) + salt.charAt(2) + password + salt.charAt(0) + salt.charAt(1));
-                axios.post('/user/insertUser', updateUserVue.$data).then(function (response) {
+                axios.post('../user/insertUser', updateUserVue.$data).then(function (response) {
                     if (response.data.code === 0) {
                         alert('添加用户成功：' + response.data.message);
                     }
@@ -33,8 +33,8 @@ var updateUserVue = new Vue({
             }
         },
         checkFormParam: function (name) {
-            var yesPngUrl = 'picture/yes.png';
-            var noPngUrl = 'picture/no.png';
+            var yesPngUrl = '../picture/yes.png';
+            var noPngUrl = '../picture/no.png';
             switch (name) {
                 case 'username':
                     this.checkPasswordAndUsernameReg(this.username) ? this.checkUsernameModel = yesPngUrl : this.checkUsernameModel = noPngUrl;
@@ -100,7 +100,7 @@ var updateUserVue = new Vue({
             //获取带路径的文件名
             //document.getElementById('avatar').value
             //序列化表单，可序列化文件 new FormData($('#form')[0]))
-            axios.post('user/uploadAvatar', new FormData($('#form')[0])).then(function (response) {
+            axios.post('../user/uploadAvatar', new FormData($('#form')[0])).then(function (response) {
                 var avatar = avatarFolder + response.data.data;
                 updateUserVue.changeAvatarFunction(avatar);
             })

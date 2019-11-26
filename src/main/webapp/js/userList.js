@@ -33,6 +33,9 @@ var userListVue = new Vue({
         formatLocked: function (value, row, index) {
             return value === 1 ? "正常" : "封禁";
         },
+        formatAvatar:function(value, row, index){
+            return '<img style="width:50px;height:50px;" src='+value+'>'
+        },
         updateUser: function () {
             layer.open({
                 type: 2,

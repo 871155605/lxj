@@ -1,130 +1,110 @@
-
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>无标题文档</title>
     <link href="css/tail.css" rel="stylesheet" type="text/css">
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../login/login_font/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../login/login_iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="../login/login_css/loginUtil.css">
+    <link rel="stylesheet" type="text/css" href="../login/login_css/loginMain.css">
+    <script src="../common/util/md5.js"></script>
+    <script src="../common/vue/vue.js"></script>
+    <script src="../common/axios/axios.min.js"></script>
 </head>
-<body style="border-radius: 8px;width: 680px">
-<form>
-    <div class="top table2_top">
+<body>
+<div class="container-login100" id="login_background">
+    <div id="updateUserDiv" class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
         <div>
-            <div class="top_out">
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td>用户名<span>*</span></td>
-                        <td><input type="text" required   minlength ="2"></td>
-                        <td>密码<span>*</span></td>
-                        <td><input type="password" class="long_text" required></td>
-                    </tr>
-                    <tr>
-                        <td>岗位<span></span></td>
-                        <td>
-                            <select class="td_select">
-                                <option>选择公司</option>
-                                <option>成都分公司</option>
-                                <option>杭州总部</option>
-                            </select>
-                            <select class="td_select">
-                                <option>工作部门</option>
-                                <option>销售部</option>
-                                <option>研发部</option>
-                            </select>
-                            <select class="td_select">
-                                <option>工作岗位</option>
-                                <option>Java工程师</option>
-                                <option>安卓工程师</option>
-                            </select>
-                        </td>
-                        <td>岗位<span></span></td>
-                        <td>
-                            <select>
-                                <option>全部</option>
-                                <option>Java工程师</option>
-                                <option>前端工程师</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>部门<span></span></td>
-                        <td>
-                            <select>
-                                <option>全部</option>
-                                <option>超级管理员</option>
-                                <option>普通管理员</option>
-                            </select>
-                        </td>
-                        <td>角色<span></span></td>
-                        <td>
-                            <select>
-                                <option>全部</option>
-                                <option>超级管理员</option>
-                                <option>普通管理员</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>工号<span>*</span></td>
-                        <td><input type="text" required></td>
-                        <td>姓名<span>*</span></td>
-                        <td><input type="text" required></td>
-                    </tr>
-                    <tr>
-                        <td>性别<span></span></td>
-                        <td>
-                            <select>
-                                <option>男</option>
-                                <option>女</option>
-                            </select>
-                        </td>
-                        <td>生日<span></span></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <td>手机<span></span></td>
-                        <td><input type="text"></td>
-                        <td>电话<span></span></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <td>邮箱<span></span></td>
-                        <td><input type="email" required></td>
-                        <td>QQ<span></span></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <td>备注<span></span></td>
-                        <td colspan = "8" style="text-align: left"><textarea></textarea></td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="wrap-input100 validate-input m-b-23" data-validate="请输入用户名">
+                <span class="label-input100">用户名</span>
+                <img height="12px" aria-required="true" v-bind:src="checkUsernameModel">
+                <input class="input100" type="text" name="username" placeholder="请输入至少4位/英文/数字/上限20"
+                       autocomplete="off" @keyup.delete="cleanInputOrHint('username','input')" v-model="username"
+                       @mouseenter="cleanInputOrHint('username','hint')" @mouseleave="checkFormParam('username')">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="密码">
+                <span class="label-input100">密码</span>
+                <img height="12px" aria-required="true" v-bind:src="checkPasswordModel">
+                <input class="input100" type="password" name="password" placeholder="请输入至少4位/英文/数字/上限20"
+                       @keyup.delete="cleanInputOrHint('password','input')" v-model="password"
+                       @mouseenter="cleanInputOrHint('password','hint')" @mouseleave="checkFormParam('password')">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="代号">
+                <span class="label-input100">代号</span>
+                <img height="12px" aria-required="true" v-bind:src="checkRealNameModel">
+                <input class="input100" type="text" name="realname" placeholder="请输入/英文/数字/上限20"
+                       @keyup.delete="cleanInputOrHint('realname','input')" v-model="realname"
+                       @mouseenter="cleanInputOrHint('realname','hint')" @mouseleave="checkFormParam('realname')">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="电话">
+                <span class="label-input100">电话</span>
+                <input class="input100" type="text" name="phone" placeholder="" v-model="phone">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="邮箱">
+                <span class="label-input100">邮箱</span>
+                <input class="input100" type="text" name="email" placeholder="" v-model="email">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="性别">
+                <span class="label-input100">性别</span>
+                <div class="input100">
+                    <label><input type="radio" name="sex" value="1" v-model="sex">男</label>
+                    <label><input type="radio" name="sex" value="2" v-model="sex">女</label>
+                </div>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="请输入密码">
+                <span class="label-input100">用户状态</span>
+                <div class="input100">
+                    <label><input type="radio" name="locked" value="1" v-model="locked">开启</label>
+                    <label><input type="radio" name="locked" value="2" v-model="locked">禁用</label>
+                </div>
+            </div>
+            <br>
+            <div>
+                <form enctype="multipart/form-data" id="form" name="form" method="post" action="#">
+                    头像
+                    <input type="file" multiple name="avatar" id="avatar"><br>
+                    <img height="15px" src="../picture/up.png" v-on:click='uploadAvatar'><br><br>
+                </form>
+                <div align="center">
+                    <img height="50px" aria-required="true" v-bind:src="avatar">
+                </div>
+            </div>
+            <div class="verBox">
+                <div id="imgVer" style="display:inline-block;"></div>
             </div>
         </div>
-        <div class="notice_bot">
-            <div class="l_left"><input type="checkbox" checked="checked"/>保存并关闭窗口</div>
-            <div class="r_right but_p"><button class="but_save" type="submit" onclick="save()">保存</button><button class="but_close" onclick="Cancel()">关闭</button></div>
+        <h5 align="center">{{responseMsg}}</h5>
+        <br>
+        <div class="container-login100-form-btn">
+            <div class="wrap-login100-form-btn">
+                <div class="login100-form-bgbtn"></div>
+                <button class="login100-form-btn" v-on:click="insertUser">确 定</button>
+            </div>
         </div>
     </div>
-</form>
+</div>
+<div class="notice_bot">
+    <div class="l_left"><input type="checkbox" checked="checked"/>保存并关闭窗口</div>
+    <div class="r_right but_p">
+        <button class="but_save" type="submit" onclick="save()">保存</button>
+        <button class="but_close" onclick="Cancel()">关闭</button>
+    </div>
+</div>
 <script src="js/jquery-2.2.0.min.js"></script>
 <script src="js/bstable/js/bootstrap.min.js"></script>
+<script src="../js/updateUser.js"></script>
 <script>
     function Cancel() {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
-    }
-    function save(){
-        layer.msg('数据提交中', {
-            icon: 16,
-            shade: 0.01,
-            time: 20000
-        });
-        setTimeout(function(){
-            layer.closeAll('dialog');
-        }, 3000);
     }
 </script>
 </body>
