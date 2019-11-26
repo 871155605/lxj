@@ -8,7 +8,6 @@ import my.self.bsmg.config.shiro.UserLoginToken;
 import my.self.bsmg.constans.LoginType;
 import my.self.bsmg.entity.GlobalResponse;
 import my.self.bsmg.entity.UserLoginReq;
-import my.self.bsmg.entity.UserQueryReq;
 import my.self.bsmg.exception.CheckCodeErrorException;
 import my.self.bsmg.exception.CheckCodeTimeoutException;
 import my.self.bsmg.exception.PhoneNumberNotBindingUserException;
@@ -23,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -107,9 +107,9 @@ public class UserController {
 
     @PostMapping("/selectUserList")
     @RequiresRoles("admin")
-    public GlobalResponse selectUserList(@RequestBody UserQueryReq userQueryReq) {
-        PageInfo<User> userPageInfo = userService.selectUserList(userQueryReq);
-        return userPageInfo == null ? GlobalResponse.of(-1, "获取用户列表失败") : GlobalResponse.of(userPageInfo);
+    public PageInfo<User> selectUserList(@RequestBody Map<String,String> map) {
+        PageInfo<User> userPageInfo = userService.selectUserList(map);
+        return userPageInfo == null ? new PageInfo<>() : userPageInfo;
     }
 
     @GetMapping("/selectRoleListByUserId")

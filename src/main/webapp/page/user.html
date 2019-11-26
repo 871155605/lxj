@@ -1,0 +1,146 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+    <title></title>
+    <link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="css/table.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: #ecf0f5;font-family: 微软雅黑;color: #475059;min-width: 1150px;overflow: auto">
+<div class="notice_main " id="userListDiv">
+    <div class="notice_check  notice_check_last">
+        <p class="l_left">
+            <label class="">性别：</label>
+            <select class="find_input" v-model="sex">
+                <option value="">全部</option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select>
+            <label class="">状态：</label>
+            <select class="find_input" v-model="locked">
+                <option value="">全部</option>
+                <option value="1">正常</option>
+                <option value="2">锁定</option>
+            </select>
+            <label class="">名字：</label>
+            <input type="text"  v-model="realName" class="find_input last_input">
+            <button class="check_btn" v-on:click="refreshTable">查询</button>
+        </p>
+        <div class="notice_nav r_right">
+            <a class="btn btn-default" v-on:click="addUser"><span class="glyphicon glyphicon-plus"></span>新增</a>
+            <a class="btn btn-default"><span class="glyphicon glyphicon-remove"></span>删除</a>
+            <a class="btn btn-default" v-on:click="updateUser"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+        </div>
+        <div class="clear"></div>
+        </div>
+    <table id="table" class="table_style" style="margin: 0 auto" > </table>
+</div>
+
+<script src="../common/vue/vue.js"></script>
+<script src="../common/axios/axios.min.js"></script>
+<script src="../js/userList.js"></script>
+<script src="js/jquery/jQuery-2.2.0.min.js"></script>
+<script src="js/bstable/js/bootstrap.min.js"></script>
+<script src="js/bstable/js/bootstrap-table.js"></script>
+<script src="js/bstable/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/layer_v2.1/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#table').bootstrapTable({
+            method: "post",
+            striped: true,
+            singleSelect: false,
+            dataType: "json",
+            pagination: true, //分页
+            sidePagination : 'server',//服务端分页
+            pageSize: 10,
+            pageNumber: 1,
+            queryParams : userListVue.getParams,//获得table中的参数
+            ajax: userListVue.getUserList,
+            search: false, //显示搜索框
+            contentType: "application/json",
+            columns: [
+                {
+                    checkbox: "true",
+                    field: 'check',
+                    align: 'center',
+                    valign: 'middle'
+                }
+                ,
+                {
+                    title: "用户编号",
+                    field: 'userId',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '用户名',
+                    field: 'username',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '真名',
+                    field: 'realname',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '电话',
+                    field: 'phone',
+                    align: 'center'
+                },
+                {
+                    title: '邮箱',
+                    field: 'email',
+                    align: 'center'
+                },
+                {
+                    title: '性别',
+                    field: 'sex',
+                    align: 'center',
+                    formatter:userListVue.formatSex
+                },
+                {
+                    title: '用户状态',
+                    field: 'locked',
+                    align: 'center',
+                    formatter:userListVue.formatLocked
+                },
+                {
+                    title: '头像',
+                    field: 'avatar',
+                    align: 'center'
+                }
+            ]
+        });
+    });
+/*    function addUser(){
+        layer.open({
+            type: 2,
+            title: '添加用户',
+            shadeClose: true,
+            shade: 0.5,
+            skin: 'layui-layer-rim',
+            closeBtn:1,
+            area: ['700px', '474px'],
+            content: 'user_tail.html'
+        });
+    }
+    function warrant(){
+        layer.open({
+            type: 2,
+            title: '用户授权',
+            shadeClose: true,
+            shade: 0.5,
+            skin: 'layui-layer-rim',
+            closeBtn:1,
+            area: ['700px', '474px'],
+            content: 'user_tail.html'
+        });
+    }*/
+</script>
+</body>
+</html>

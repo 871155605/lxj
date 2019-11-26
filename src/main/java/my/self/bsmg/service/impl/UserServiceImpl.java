@@ -9,18 +9,13 @@ import my.self.bsmg.bean.UserAndRoleExample;
 import my.self.bsmg.bean.UserExample;
 import my.self.bsmg.dao.UserAndRoleMapper;
 import my.self.bsmg.dao.UserMapper;
-import my.self.bsmg.entity.UserQueryReq;
 import my.self.bsmg.service.UserService;
 import my.self.bsmg.util.MD5Util;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 @Log4j2
@@ -82,15 +77,21 @@ public class UserServiceImpl implements UserService {
      * @return PageInfo
      */
     @Override
-    public PageInfo<User> selectUserList(UserQueryReq queryReq) {
+    public PageInfo<User> selectUserList(Map<String, String> map) {
+        String pageNumber = map.get("pageNumber");
+        String pageSize = map.get("pageSize");
+        String realName = map.get("realName");
+        String sex = map.get("sex");
+        String locked = map.get("locked");
         try {
-            PageHelper.startPage(queryReq.getPageNum(), queryReq.getLimit());
-            List<User> userList = userMapper.selectByExample(createPageQueryExample(queryReq.getRealName(), queryReq.getSex(), queryReq.getLocked()));
+            PageHelper.startPage(isNotNullString(pageNumber) ? Integer.valueOf(pageNumber) : 1, isNotNullString(pageSize) ? Integer.valueOf(pageSize) : 5);
+            List<User> userList = userMapper.selectByExample(createPageQueryExample(realName, sex, locked));
             PageInfo<User> pageInfo = new PageInfo<>(userList);
-            log.info("SELECT_USER_LIST_SUCCESS |{}| TOTAL={}", queryReq.toString(), pageInfo.getTotal());
+            log.info("SELECT_USER_LIST_SUCCESS |{}| TOTAL={}", map.toString(), pageInfo.getTotal());
             return pageInfo;
         } catch (Exception e) {
-            log.error("SELECT_USER_LIST_ERROR |{}|{}", queryReq.toString(), e.getMessage());
+            log.info("SELECT_USER_LIST_ERROR |{}",map.toString());
+            e.printStackTrace();
         }
         return null;
     }
@@ -204,18 +205,22 @@ public class UserServiceImpl implements UserService {
      * @param locked   Integer
      * @return UserExample
      */
-    private UserExample createPageQueryExample(String realName, Integer sex, Integer locked) {
+    private UserExample createPageQueryExample(String realName, String sex, String locked) {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         if (realName != null && !"".equals(realName) && !"null".equals(realName)) {
             criteria.andRealnameLike("%" + realName + "%");
         }
-        if (sex != null) {
-            criteria.andSexEqualTo(sex.byteValue());
+        if (isNotNullString(sex)) {
+            criteria.andSexEqualTo(Integer.valueOf(sex).byteValue());
         }
-        if (locked != null) {
-            criteria.andLockedEqualTo(locked.byteValue());
+        if (isNotNullString(locked)) {
+            criteria.andLockedEqualTo(Integer.valueOf(locked).byteValue());
         }
         return userExample;
+    }
+
+    private boolean isNotNullString(String param) {
+        return !(param == null || "".equals(param) || "null".equals(param));
     }
 }

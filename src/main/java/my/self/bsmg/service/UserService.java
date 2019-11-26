@@ -3,7 +3,6 @@ package my.self.bsmg.service;
 import com.github.pagehelper.PageInfo;
 import my.self.bsmg.bean.Role;
 import my.self.bsmg.bean.User;
-import my.self.bsmg.entity.UserQueryReq;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ public interface UserService {
      *
      * @return PageInfo
      */
-    PageInfo<User> selectUserList(UserQueryReq userQueryReq);
+    PageInfo<User> selectUserList(Map<String,String> map);
 
     /**
      * 通过userId查询角色列表

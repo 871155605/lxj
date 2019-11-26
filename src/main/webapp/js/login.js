@@ -32,7 +32,7 @@ var loginVue = new Vue({
                 if (response.data.code === 0) {
                     //JSON.stringify将JSON对象转换为字符串 因为sessionStorage.setItem只支持存储字符串格式
                     sessionStorage.setItem("user", JSON.stringify(response.data.data));
-                    window.location.href = "/index.html";
+                    window.location.href = "/page/index.html";
                 }
             }).catch(function (error) {
                 console.log(error);
